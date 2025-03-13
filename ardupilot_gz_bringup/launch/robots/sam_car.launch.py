@@ -88,7 +88,8 @@ def generate_launch_description():
                 pkg_ardupilot_sitl,
                 "config",
                 "default_params",
-                "sam_car.parm",
+                #"sam_car.parm",
+                "rover.parm",
             )
             + ","
             + os.path.join(

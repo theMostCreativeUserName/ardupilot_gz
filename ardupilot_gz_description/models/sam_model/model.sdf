@@ -1,0 +1,123 @@
+<?xml version='1.0'?>
+<sdf version="1.9">
+
+  <model name="iris_with_lidar">
+    <include merge="true">
+      <uri>model://sam_model</uri>
+    </include>
+
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+        </plugin>
+
+        <plugin filename="gz-sim-pose-publisher-system" name="gz::sim::systems::PosePublisher">
+            <publish_link_pose>1</publish_link_pose>
+            <publish_visual_pose>1</publish_visual_pose>            <!-- Ensure visual poses are published -->
+            <publish_collision_pose>1</publish_collision_pose>            <!-- Ensure collision poses are published -->
+            <publish_sensor_pose>1</publish_sensor_pose>            <!-- Ensure sensor poses are published -->
+            <publish_model_pose>1</publish_model_pose>
+            <publish_nested_model_pose>1</publish_nested_model_pose>            <!-- Ensure nested model poses are published -->
+            <update_frequency>50</update_frequency>
+        </plugin>
+<!--
+        Modify the AckermannSteering plugin to be steering only as the ArduPilot
+        plugin does not supply cmd_vel, but forwards steering and throttle
+        commands separately.
+        as defined in: https://gazebosim.org/api/gazebo/6/classignition_1_1gazebo_1_1systems_1_1AckermannSteering.html
+      -->
+ <plugin filename="gz-sim-ackermann-steering-system" name="gz::sim::systems::AckermannSteering">
+            
+        <steering_only>true</steering_only>
+        <use_actuator_msg>false</use_actuator_msg>
+            <right_joint>steering_wheel_rf_joint</right_joint>
+            <right_joint>base_link_wheel_rb_joint</right_joint>
+            <left_joint>steering_wheel_lf_joint</left_joint>
+            <left_joint>base_link_wheel_lb_joint</left_joint>
+            <right_steering_joint>base_link_steering_right</right_steering_joint>
+            <left_steering_joint>base_link_steering_left</left_steering_joint>
+            <kingpin_width>0.1</kingpin_width>
+            <steering_limit>0.5</steering_limit>
+            <!-- distance between front and back wheels-->
+            <wheel_base>0.296</wheel_base>
+            <!-- distance between front wheels-->
+            <wheel_separation>0.229</wheel_separation>
+            <wheel_radius>0.055</wheel_radius>
+            <min_velocity>-30</min_velocity>
+            <max_velocity>30</max_velocity>
+            <min_acceleration>-30</min_acceleration>
+            <max_acceleration>30</max_acceleration>
+            <!-- topic default: /model/{name_of_model}/cmd_vel and 
+             /model/{name_of_model}/odometry-->
+        </plugin>
+
+        <!-- Velocity controllers for both back wheels-->
+        <plugin name="gz::sim::systems::JointController" filename="gz-sim-joint-controller-system">
+            <joint_name>base_link_wheel_lb_joint</joint_name>
+            <use_force_commands>true</use_force_commands>
+            <use_actuator_msg>false</use_actuator_msg>
+            <p_gain>0.1</p_gain>
+            <i_gain>0.0</i_gain>
+            <d_gain>0.0</d_gain>
+        </plugin>
+        <plugin name="gz::sim::systems::JointController" filename="gz-sim-joint-controller-system">
+            <joint_name>base_link_wheel_rb_joint</joint_name>
+            <use_force_commands>true</use_force_commands>
+            <use_actuator_msg>false</use_actuator_msg>
+            <p_gain>0.1</p_gain>
+            <i_gain>0.0</i_gain>
+            <d_gain>0.0</d_gain>
+        </plugin>
+
+        <!-- *********************** Ardupilot ************************  -->
+        <!-- 
+        Launch ArduPilot SITL with the command:
+        
+        sim_vehicle.py -D -v Rover -f rover -/-model JSON -/-enable-dds
+        -/-console -/-map
+        -->
+
+        <plugin name="ArduPilotPlugin" filename="ArduPilotPlugin">
+            <!-- Port settings -->
+            <fdm_addr>127.0.0.1</fdm_addr>
+            <fdm_port_in>9002</fdm_port_in>
+            <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>
+            <lock_step>1</lock_step>
+            <modelXYZToAirplaneXForwardZDown degrees="true">0 0 0 180 0 0</modelXYZToAirplaneXForwardZDown>
+            <gazeboXYZToNED degrees="true">0 0 0 180 0 0</gazeboXYZToNED>
+
+            <!-- Sensors -->
+            <imuName>base_link::imu_sensor</imuName>
+
+            <!-- steering -->
+            <control channel="0">
+                <jointName>steering_wheel_lf_joint</jointName>
+                <useForce>1</useForce>
+                <multiplier>-1.571</multiplier>
+                <offset>-0.5</offset>
+                <servo_min>1000</servo_min>
+                <servo_max>2000</servo_max>
+                <type>COMMAND</type>
+                <cmd_topic>/model/sam_model/steering_angle</cmd_topic>
+            </control>
+
+            <!-- throttle -->
+            <control channel="2">
+                <jointName>base_link_wheel_lb_joint</jointName>
+                <multiplier>100.0</multiplier>
+                <offset>-0.5</offset>
+                <servo_min>500</servo_min>
+                <servo_max>2000</servo_max>
+                <type>COMMAND</type>
+                <cmd_topic>/model/sam_model/joint/rear_left_wheel_joint/cmd_vel</cmd_topic>
+            </control>
+            <control channel="2">
+                <jointName>base_link_wheel_rb_joint</jointName>
+                <multiplier>100.0</multiplier>
+                <offset>-0.5</offset>
+                <servo_min>1000</servo_min>
+                <servo_max>2000</servo_max>
+                <type>COMMAND</type>
+                <cmd_topic>/model/sam_model/joint/rear_right_wheel_joint/cmd_vel</cmd_topic>
+            </control>
+        </plugin>
+  </model>
+</sdf>
