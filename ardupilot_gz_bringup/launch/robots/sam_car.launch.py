@@ -76,11 +76,10 @@ def generate_launch_description():
         ),
         launch_arguments={
             "transport": "udp4",
-            "port": "2019",
             "command": "ardurover",
             "synthetic_clock": "True",
             "wipe": "False",
-            "model": "json",
+            "model": "rover",
             "speedup": "1",
             "slave": "0",
             "instance": "0",
@@ -88,7 +87,6 @@ def generate_launch_description():
                 pkg_ardupilot_sitl,
                 "config",
                 "default_params",
-                #"sam_car.parm",
                 "rover.parm",
             )
             + ","
@@ -126,9 +124,9 @@ def generate_launch_description():
 
         # substitute `models://` with `package://ardupilot_sitl_models/models/`
         # for sdformat_urdf plugin used by robot_state_publisher
-       # robot_desc = robot_desc.replace(
-       #     "model://sam_model",
-       #     "package://sam_sitl_models/models/sam_model")
+        robot_desc = robot_desc.replace(
+             "model://sam_model",
+             "package://sam_sitl_models/models/sam_model")
 
     # Publish /tf and /tf_static.
     robot_state_publisher = Node(
@@ -138,7 +136,7 @@ def generate_launch_description():
         output="both",
         parameters=[
             {"robot_description": robot_desc},
-            {"frame_prefix": ""},
+            {"frame_prefix": ""}
         ],
     )
 

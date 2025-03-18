@@ -76,7 +76,7 @@
     <!-- Sam rover -->
     <include>
       <pose degrees="true">0 0 0.15 0 0 90</pose>
-      <uri>model://sam_model</uri>
+      <uri>package://sam_sitl_models/models/sam_model</uri>
       <name>sam_model</name>
     </include>
 

@@ -31,7 +31,6 @@
 
 """Launch an car in Gazebo and Rviz."""
 from pathlib import Path
-
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
@@ -68,7 +67,7 @@ def generate_launch_description():
         )
     )
 
-    # Gazebo.
+    # Setup to launch the simulator and Gazebo world
     gz_sim_server = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             f'{Path(pkg_ros_gz_sim) / "launch" / "gz_sim.launch.py"}'
