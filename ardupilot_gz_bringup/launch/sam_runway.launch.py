@@ -66,6 +66,20 @@ def generate_launch_description():
             ]
         )
     )
+     # sam.
+    topic_converter = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            [
+                PathJoinSubstitution(
+                    [
+                        FindPackageShare("sam_topic_converter"),
+                        "launch",
+                        "sam_topic_converter.launch.py",
+                    ]
+                ),
+            ]
+        )
+    )
 
     # Setup to launch the simulator and Gazebo world
     gz_sim_server = IncludeLaunchDescription(
@@ -102,5 +116,6 @@ def generate_launch_description():
             gz_sim_gui,
             sam,
             rviz,
+            topic_converter
         ]
     )
