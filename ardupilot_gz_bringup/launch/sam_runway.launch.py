@@ -66,7 +66,7 @@ def generate_launch_description():
             ]
         )
     )
-     # sam.
+    # topic_converter for sam project
     topic_converter = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [

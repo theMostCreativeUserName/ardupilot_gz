@@ -52,7 +52,6 @@ Visualization Manager:
               Value: true
             camera:
               Value: true
-              Value: true
             lidar:
               Value: true
             sonar_l:
@@ -224,7 +223,7 @@ Visualization Manager:
           Min Color: 0; 0; 0
           Min Intensity: 0
           Name: LidarScan
-          Position Transformer: ""
+          Position Transformer: XYZ
           Selectable: true
           Size (Pixels): 3
           Size (m): 0.009999999776482582
