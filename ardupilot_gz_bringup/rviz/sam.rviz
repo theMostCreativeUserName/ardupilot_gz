@@ -6,8 +6,9 @@ Panels:
       Expanded:
         - /Global Options1
         - /Model1
+        - /Data1
       Splitter Ratio: 0.4941176474094391
-    Tree Height: 405
+    Tree Height: 115
   - Class: rviz_common/Views
     Expanded:
       - /Current View1
@@ -64,12 +65,15 @@ Visualization Manager:
               Value: true
             sonar_rb:
               Value: true
-            
+            steering_left:
+              Value: true
+            steering_right:
+              Value: true
             wheel_lb:
               Value: true
-            wheel_rb:
-              Value: true
             wheel_lf:
+              Value: true
+            wheel_rb:
               Value: true
             wheel_rf:
               Value: true
@@ -80,28 +84,29 @@ Visualization Manager:
           Show Names: false
           Tree:
             base_link:
-              chassis:
-                camera_link:
-                  {}
-                lidar_link:
-                  {}
-                sonar_l:
-                  {}
-                sonar_lb:
-                  {}
-                sonar_mid_b:
-                  {}
-                sonar_r:
-                  {}
-                sonar_rb:
-                  {}
-              wheel_rf:
+              camera:
                 {}
-              wheel_lf:
+              lidar:
+                {}
+              sonar_l:
+                {}
+              sonar_lb:
+                {}
+              sonar_mid_b:
+                {}
+              sonar_r:
+                {}
+              sonar_rb:
+                {}
+              steering_left:
+                wheel_lf:
+                  {}
+              steering_right:
+                wheel_rf:
+                  {}
+              wheel_lb:
                 {}
               wheel_rb:
-                {}
-              wheel_rl:
                 {}
           Update Interval: 0
           Value: true
@@ -118,8 +123,7 @@ Visualization Manager:
             Value: /robot_description
           Enabled: true
           Links:
-            All Links Enabled:
-              {}
+            All Links Enabled: true
             Expand Joint Details: false
             Expand Link Details: false
             Expand Tree: false
@@ -128,50 +132,72 @@ Visualization Manager:
               Alpha: 1
               Show Axes: false
               Show Trail: false
+              Value: true
             camera:
               Alpha: 1
               Show Axes: false
               Show Trail: false
+              Value: true
             lidar:
               Alpha: 1
               Show Axes: false
               Show Trail: false
+              Value: true
             sonar_l:
               Alpha: 1
               Show Axes: false
               Show Trail: false
+              Value: true
             sonar_lb:
               Alpha: 1
               Show Axes: false
               Show Trail: false
+              Value: true
             sonar_mid_b:
               Alpha: 1
               Show Axes: false
               Show Trail: false
+              Value: true
             sonar_r:
               Alpha: 1
               Show Axes: false
               Show Trail: false
+              Value: true
             sonar_rb:
               Alpha: 1
               Show Axes: false
               Show Trail: false
+              Value: true
+            steering_left:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            steering_right:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
             wheel_lb:
               Alpha: 1
               Show Axes: false
               Show Trail: false
+              Value: true
             wheel_lf:
               Alpha: 1
               Show Axes: false
               Show Trail: false
+              Value: true
             wheel_rb:
               Alpha: 1
               Show Axes: false
               Show Trail: false
+              Value: true
             wheel_rf:
               Alpha: 1
               Show Axes: false
               Show Trail: false
+              Value: true
           Mass Properties:
             Inertia: false
             Mass: false
@@ -277,39 +303,6 @@ Visualization Manager:
             Reliability Policy: Reliable
             Value: /odometry
           Value: true
-        - Class: rviz_default_plugins/Camera
-          Enabled: true
-          Far Plane Distance: 100
-          Image Rendering: background and overlay
-          Name: Camera
-          Overlay Alpha: 0.5
-          Topic:
-            Depth: 5
-            Durability Policy: Volatile
-            History Policy: Keep Last
-            Reliability Policy: Reliable
-            Value: ""
-          Value: true
-          Visibility:
-            Data:
-              Camera: true
-              LidarScan: true
-              Odometry: true
-              SonarBL: true
-              SonarBM: true
-              SonarBR: true
-              SonarL: true
-              SonarR: true
-              Value: true
-            Model:
-              Axes: true
-              Grid: true
-              Pose: true
-              RobotModel: true
-              TF: true
-              Value: true
-            Value: true
-          Zoom Factor: 1
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
@@ -320,16 +313,16 @@ Visualization Manager:
           Channel Name: intensity
           Class: rviz_default_plugins/LaserScan
           Color: 255; 255; 255
-          Color Transformer: ""
+          Color Transformer: Intensity
           Decay Time: 0
           Enabled: true
           Invert Rainbow: false
           Max Color: 255; 255; 255
-          Max Intensity: 4096
+          Max Intensity: -999999
           Min Color: 0; 0; 0
-          Min Intensity: 0
+          Min Intensity: 999999
           Name: SonarBL
-          Position Transformer: ""
+          Position Transformer: XYZ
           Selectable: true
           Size (Pixels): 3
           Size (m): 0.009999999776482582
@@ -354,16 +347,16 @@ Visualization Manager:
           Channel Name: intensity
           Class: rviz_default_plugins/LaserScan
           Color: 255; 255; 255
-          Color Transformer: ""
+          Color Transformer: Intensity
           Decay Time: 0
           Enabled: true
           Invert Rainbow: false
           Max Color: 255; 255; 255
-          Max Intensity: 4096
+          Max Intensity: -999999
           Min Color: 0; 0; 0
-          Min Intensity: 0
+          Min Intensity: 999999
           Name: SonarBM
-          Position Transformer: ""
+          Position Transformer: XYZ
           Selectable: true
           Size (Pixels): 3
           Size (m): 0.009999999776482582
@@ -388,16 +381,16 @@ Visualization Manager:
           Channel Name: intensity
           Class: rviz_default_plugins/LaserScan
           Color: 255; 255; 255
-          Color Transformer: ""
+          Color Transformer: Intensity
           Decay Time: 0
           Enabled: true
           Invert Rainbow: false
           Max Color: 255; 255; 255
-          Max Intensity: 4096
+          Max Intensity: -999999
           Min Color: 0; 0; 0
-          Min Intensity: 0
+          Min Intensity: 999999
           Name: SonarBR
-          Position Transformer: ""
+          Position Transformer: XYZ
           Selectable: true
           Size (Pixels): 3
           Size (m): 0.009999999776482582
@@ -422,16 +415,16 @@ Visualization Manager:
           Channel Name: intensity
           Class: rviz_default_plugins/LaserScan
           Color: 255; 255; 255
-          Color Transformer: ""
+          Color Transformer: Intensity
           Decay Time: 0
           Enabled: true
           Invert Rainbow: false
           Max Color: 255; 255; 255
-          Max Intensity: 4096
+          Max Intensity: -999999
           Min Color: 0; 0; 0
-          Min Intensity: 0
+          Min Intensity: 999999
           Name: SonarL
-          Position Transformer: ""
+          Position Transformer: XYZ
           Selectable: true
           Size (Pixels): 3
           Size (m): 0.009999999776482582
@@ -456,16 +449,16 @@ Visualization Manager:
           Channel Name: intensity
           Class: rviz_default_plugins/LaserScan
           Color: 255; 255; 255
-          Color Transformer: ""
+          Color Transformer: Intensity
           Decay Time: 0
           Enabled: true
           Invert Rainbow: false
           Max Color: 255; 255; 255
-          Max Intensity: 4096
+          Max Intensity: -999999
           Min Color: 0; 0; 0
-          Min Intensity: 0
+          Min Intensity: 999999
           Name: SonarR
-          Position Transformer: ""
+          Position Transformer: XYZ
           Selectable: true
           Size (Pixels): 3
           Size (m): 0.009999999776482582
@@ -482,6 +475,20 @@ Visualization Manager:
           Value: true
       Enabled: true
       Name: Data
+    - Class: rviz_default_plugins/Image
+      Enabled: true
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Image
+      Normalize Range: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /camera/camera/color/image_raw
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -588,4 +595,17 @@ Visualization Manager:
         Target Frame: <Fixed Frame>
         Value: Orbit (rviz_default_plugins)
         Yaw: 6.1048407554626465
-
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 720
+  Hide Left Dock: false
+  Hide Right Dock: false
+  Image:
+    collapsed: false
+  QMainWindow State: 000000ff00000000fd00000001000000000000019b0000027afc0200000004fb0000000c00430061006d006500720061000000003b0000003e0000000000000000fb000000100044006900730070006c006100790073010000003b000000f4000000c700fffffffb0000000a005600690065007700730100000135000000c3000000a000fffffffb0000000a0049006d00610067006501000001fe000000b70000002800ffffff0000021d0000027a00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Views:
+    collapsed: false
+  Width: 958
+  X: 519
+  Y: 1168

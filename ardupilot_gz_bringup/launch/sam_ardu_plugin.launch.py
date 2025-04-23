@@ -49,6 +49,7 @@ def generate_launch_description():
     """Generate a launch description for a sam"""
     pkg_project_bringup = get_package_share_directory("ardupilot_gz_bringup")
     pkg_project_gazebo = get_package_share_directory("ardupilot_gz_gazebo")
+    pkg_sam_models = get_package_share_directory("sam_sitl_models")
     pkg_ros_gz_sim = get_package_share_directory("ros_gz_sim")
 
     # sam.
@@ -60,26 +61,18 @@ def generate_launch_description():
                         FindPackageShare("ardupilot_gz_bringup"),
                         "launch",
                         "robots",
-                        "sam_car.launch.py",
+                        "sam_car_plugin.launch.py",
                     ]
                 ),
             ]
         )
     )
-    # topic_converter for sam project
-    topic_converter = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            [
-                PathJoinSubstitution(
-                    [
-                        FindPackageShare("sam_topic_converter"),
-                        "launch",
-                        "sam_topic_converter.launch.py",
-                    ]
-                ),
-            ]
+   # topic_converter for sam project
+    topic_converter = Node(
+            package="sam_topic_converter",
+            executable="ardu_converter_node",
+            output="screen"
         )
-    )
 
     # Setup to launch the simulator and Gazebo world
     gz_sim_server = IncludeLaunchDescription(
@@ -88,7 +81,7 @@ def generate_launch_description():
         ),
         launch_arguments={
             "gz_args": "-v4 -s -r "
-            + f'{Path(pkg_project_gazebo) / "worlds" / "sam_runway.sdf"}'
+            + f'{Path(pkg_sam_models) / "worlds" / "sam_playpen_simple.sdf"}'
         }.items(),
     )
 
@@ -116,6 +109,6 @@ def generate_launch_description():
             gz_sim_gui,
             sam,
             rviz,
-            topic_converter
+           topic_converter
         ]
     )

@@ -26,7 +26,7 @@ speedup:=1
 slave:=0
 instance:=0
 defaults:=$(ros2 pkg prefix ardupilot_sitl)
-          /share/ardupilot_sitl/config/default_params/rover-skid.parm,
+          /share/ardupilot_sitl/config/default_params/rover.parm,
           $(ros2 pkg prefix ardupilot_sitl)
           /share/ardupilot_sitl/config/default_params/dds_udp.parm
 sim_address:=127.0.0.1
@@ -58,7 +58,8 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     """Generate a launch description for a wild thumper rover."""
     pkg_ardupilot_sitl = get_package_share_directory("ardupilot_sitl")
-    pkg_ardupilot_sitl_models = get_package_share_directory("sam_sitl_models")
+    pkg_sam_sitl_models = get_package_share_directory("sam_sitl_models")
+    pkg_ardu_sitl_models = get_package_share_directory("ardupilot_sitl_models")
     pkg_project_bringup = get_package_share_directory("ardupilot_gz_bringup")
     
     # Include component launch files.
@@ -76,17 +77,18 @@ def generate_launch_description():
         ),
         launch_arguments={
             "transport": "udp4",
+            "port": "2019",
             "command": "ardurover",
             "synthetic_clock": "True",
             "wipe": "False",
-            "model": "rover",
+            "model": "json",
             "speedup": "1",
             "slave": "0",
             "instance": "0",
-            "defaults": os.path.join(
-                pkg_ardupilot_sitl_models,
+            "defaults":os.path.join(
+                pkg_sam_sitl_models,
                 "config",
-                "sam_car.parm",
+                "sam_ardu.parm",
             )
             + ","
             + os.path.join(
@@ -97,7 +99,7 @@ def generate_launch_description():
             ),
             "sim_address": "127.0.0.1",
             "master": "tcp:127.0.0.1:5760",
-            "sitl": "127.0.0.1:5501",
+            "sitl": "127.0.0.1:5501"
         }.items(),
     )
 
@@ -116,7 +118,7 @@ def generate_launch_description():
 
     # Load SDF file.
     sdf_file = os.path.join(
-        pkg_ardupilot_sitl_models, "models", "sam_model", "model.sdf"
+        pkg_sam_sitl_models, "models", "sam_model_plugin", "model.sdf"
     )
     with open(sdf_file, "r") as infp:
         robot_desc = infp.read()
@@ -124,8 +126,8 @@ def generate_launch_description():
         # substitute `models://` with `package://ardupilot_sitl_models/models/`
         # for sdformat_urdf plugin used by robot_state_publisher
         robot_desc = robot_desc.replace(
-             "model://sam_model",
-             "package://sam_sitl_models/models/sam_model")
+             "model://sam_model_plugin",
+             "package://sam_sitl_models/models/sam_model_plugin")
 
     # Publish /tf and /tf_static.
     robot_state_publisher = Node(
@@ -146,10 +148,9 @@ def generate_launch_description():
         parameters=[
             {
                 "config_file": os.path.join(
-                    pkg_project_bringup, "config", "sam_bridge.yaml"
+                    pkg_project_bringup, "config", "sam_ardu_bridge.yaml"
                 ),
                 "qos_overrides./tf_static.publisher.durability": "transient_local",
-                #"qos_overrides./camera/camera/color/image_raw.publisher.reliability": "best_effort"
             }
         ],
         output="screen",
