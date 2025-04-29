@@ -1,0 +1,109 @@
+---
+- ros_topic_name: "clock"
+  gz_topic_name: "/clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  gz_type_name: "gz.msgs.Clock"
+  direction: GZ_TO_ROS
+
+# overall vehicle control
+#- ros_topic_name: "simulation/lb_vel"
+#  gz_topic_name: "/model/sam_model_plugin/joint/base_link_wheel_lb_joint/cmd_vel"
+#  ros_type_name: "std_msgs/msg/Float64"
+#  gz_type_name: "gz.msgs.Double"
+#  direction: BIDIRECTIONAL
+#- ros_topic_name: "simulation/rb_vel"
+#  gz_topic_name: "/model/sam_model_plugin/joint/base_link_wheel_rb_joint/cmd_vel"
+#  ros_type_name: "std_msgs/msg/Float64"
+#  gz_type_name: "gz.msgs.Double"
+#  direction: BIDIRECTIONAL
+#- ros_topic_name: "trajectory_follower/steering_angle"
+#  gz_topic_name: "/model/sam_model_plugin/steer_angle"
+#  ros_type_name: "std_msgs/msg/Float64"
+#  gz_type_name: "gz.msgs.Double"
+#  direction: BIDIRECTIONAL
+
+
+# overall pose of the vehicle
+- ros_topic_name: "simulation/odometry"
+  gz_topic_name: "/model/sam_model_plugin/odometry"
+  ros_type_name: "nav_msgs/msg/Odometry"
+  gz_type_name: "gz.msgs.Odometry"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "joint_states"
+  gz_topic_name: "/world/runway/model/sam_model_plugin/joint_state"
+  ros_type_name: "sensor_msgs/msg/JointState"
+  gz_type_name: "gz.msgs.Model"
+  direction: GZ_TO_ROS
+- ros_topic_name: "gz/tf"
+  gz_topic_name: "/model/sam_model_plugin/pose"
+  ros_type_name: "tf2_msgs/msg/TFMessage"
+  gz_type_name: "gz.msgs.Pose_V"
+  direction: GZ_TO_ROS
+- ros_topic_name: "gz/tf_static"
+  gz_topic_name: "/model/sam_model_plugin/pose_static"
+  ros_type_name: "tf2_msgs/msg/TFMessage"
+  gz_type_name: "gz.msgs.Pose_V"
+  direction: GZ_TO_ROS
+
+
+##################### Sensor topics #####################
+- ros_topic_name: "scan"
+  gz_topic_name: "/lidar"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
+  
+- ros_topic_name: "sonar_back_left"
+  gz_topic_name: "/sonar_back_left"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
+- ros_topic_name: "sonar_back_mid"
+  gz_topic_name: "/sonar_back_mid"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
+- ros_topic_name: "sonar_back_right"
+  gz_topic_name: "/sonar_back_right"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
+- ros_topic_name: "sonar_left"
+  gz_topic_name: "/sonar_left"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
+- ros_topic_name: "sonar_right"
+  gz_topic_name: "/sonar_right"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
+  
+##################### Camera topics #####################
+- ros_topic_name: "pylon_camera_node/pylon_ros2_camera_node/image_raw"
+  gz_topic_name: "/camera/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+- ros_topic_name: "pylon_camera_node/pylon_ros2_camera_node/camera_info"
+  gz_topic_name: "/camera/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+- ros_topic_name: "camera/camera/color/image_raw"
+  gz_topic_name: "/camera/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+- ros_topic_name: "camera/camera/color/camera_info"
+  gz_topic_name: "/camera/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+# IMU taken from camera
+- ros_topic_name: "camera/camera/imu"
+  gz_topic_name: "/imu"
+  ros_type_name: "sensor_msgs/msg/Imu"
+  gz_type_name: "gz.msgs.IMU"
+  direction: GZ_TO_ROS
