@@ -95,6 +95,11 @@ def generate_launch_description():
             "instance": "0",
             "middleware": "rtps",
             "defaults": os.path.join(
+                pkg_sam_sitl_models,
+                "config",
+                "sam_ardu.parm",
+            )+ "," 
+            +os.path.join(
                 pkg_ardupilot_sitl,
                 "config",
                 "default_params",

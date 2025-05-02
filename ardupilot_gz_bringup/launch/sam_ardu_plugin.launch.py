@@ -77,7 +77,7 @@ def generate_launch_description():
         ),
         launch_arguments={
             "gz_args": "-v4 -s -r "
-            f'{Path(pkg_sam_models) / "worlds" / "sam_playpen_simplesam_playpen_simple.sdf"}'
+            f'{Path(pkg_sam_models) / "worlds" / "sam_playpen_simple.sdf"}'
         }.items(),
     )
 
