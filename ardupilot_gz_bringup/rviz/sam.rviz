@@ -7,8 +7,13 @@ Panels:
         - /Global Options1
         - /Model1
         - /Data1
+        - /Data1/SonarBM1/Topic1
+        - /Data1/SonarBR1/Topic1
+        - /Data1/SonarL1/Topic1
+        - /Data1/SonarR1/Topic1
+        - /Image1
       Splitter Ratio: 0.4941176474094391
-    Tree Height: 115
+    Tree Height: 191
   - Class: rviz_common/Views
     Expanded:
       - /Current View1
@@ -259,7 +264,7 @@ Visualization Manager:
             Durability Policy: Volatile
             Filter size: 10
             History Policy: Keep Last
-            Reliability Policy: Reliable
+            Reliability Policy: Best Effort
             Value: /lidar
           Use Fixed Frame: true
           Use rainbow: true
@@ -300,7 +305,7 @@ Visualization Manager:
             Durability Policy: Volatile
             Filter size: 10
             History Policy: Keep Last
-            Reliability Policy: Reliable
+            Reliability Policy: Best Effort
             Value: /odometry
           Value: true
         - Alpha: 1
@@ -332,7 +337,7 @@ Visualization Manager:
             Durability Policy: Volatile
             Filter size: 10
             History Policy: Keep Last
-            Reliability Policy: Reliable
+            Reliability Policy: Best Effort
             Value: /sonar_back_left
           Use Fixed Frame: true
           Use rainbow: true
@@ -366,7 +371,7 @@ Visualization Manager:
             Durability Policy: Volatile
             Filter size: 10
             History Policy: Keep Last
-            Reliability Policy: Reliable
+            Reliability Policy: Best Effort
             Value: /sonar_back_mid
           Use Fixed Frame: true
           Use rainbow: true
@@ -400,7 +405,7 @@ Visualization Manager:
             Durability Policy: Volatile
             Filter size: 10
             History Policy: Keep Last
-            Reliability Policy: Reliable
+            Reliability Policy: Best Effort
             Value: /sonar_back_right
           Use Fixed Frame: true
           Use rainbow: true
@@ -434,7 +439,7 @@ Visualization Manager:
             Durability Policy: Volatile
             Filter size: 10
             History Policy: Keep Last
-            Reliability Policy: Reliable
+            Reliability Policy: Best Effort
             Value: /sonar_left
           Use Fixed Frame: true
           Use rainbow: true
@@ -468,7 +473,7 @@ Visualization Manager:
             Durability Policy: Volatile
             Filter size: 10
             History Policy: Keep Last
-            Reliability Policy: Reliable
+            Reliability Policy: Best Effort
             Value: /sonar_right
           Use Fixed Frame: true
           Use rainbow: true
@@ -486,8 +491,8 @@ Visualization Manager:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /camera/camera/color/image_raw
+        Reliability Policy: Best Effort
+        Value: /pylon_camera_node/pylon_ros2_camera_node/image_raw
       Value: true
   Enabled: true
   Global Options:
@@ -598,14 +603,14 @@ Visualization Manager:
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 720
+  Height: 914
   Hide Left Dock: false
   Hide Right Dock: false
   Image:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000001000000000000019b0000027afc0200000004fb0000000c00430061006d006500720061000000003b0000003e0000000000000000fb000000100044006900730070006c006100790073010000003b000000f4000000c700fffffffb0000000a005600690065007700730100000135000000c3000000a000fffffffb0000000a0049006d00610067006501000001fe000000b70000002800ffffff0000021d0000027a00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000001000000000000019b0000033cfc0200000004fb0000000c00430061006d006500720061000000003b0000003e0000000000000000fb000000100044006900730070006c006100790073010000003b00000140000000c700fffffffb0000000a00560069006500770073010000018100000101000000a000fffffffb0000000a0049006d0061006700650100000288000000ef0000002800ffffff000003f50000033c00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
-  Width: 958
-  X: 519
-  Y: 1168
+  Width: 1430
+  X: 2176
+  Y: 1081

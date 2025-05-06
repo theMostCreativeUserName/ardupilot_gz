@@ -1,38 +1,25 @@
-# Copyright 2023 ArduPilot.org.
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
-
 """
 Launch the sam rover in Gazebo and Rviz.
-
 ros2 launch ardupilot_sitl sitl_dds_udp.launch.py
+command:=ardurover
 transport:=udp4
-refs:=$(ros2 pkg prefix ardupilot_sitl)
-      /share/ardupilot_sitl/config/dds_xrce_profile.xml
-port:=2019
 synthetic_clock:=True
 wipe:=False
-model:=json
+model:=rover-skid
 speedup:=1
 slave:=0
 instance:=0
-defaults:=$(ros2 pkg prefix ardupilot_sitl)
-          /share/ardupilot_sitl/config/default_params/dds_udp.parm
+refs:=$(ros2 pkg prefix ardupilot_sitl)/share/ardupilot_sitl/config/dds_xrce_profile.xml
+defaults:=
+    $(ros2 pkg prefix ardupilot_sitl)/share/ardupilot_sitl/config/default_params/rover.parm,
+    $(ros2 pkg prefix ardupilot_sitl)/share/ardupilot_sitl/config/default_params/rover-skid.parm,
+    $(ros2 pkg prefix ardupilot_sitl)/share/ardupilot_sitl/config/default_params/dds_udp.parm
 sim_address:=127.0.0.1
 master:=tcp:127.0.0.1:5760
 sitl:=127.0.0.1:5501
+
 """
+
 import os
 
 from ament_index_python.packages import get_package_share_directory
@@ -54,14 +41,12 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
-
 def generate_launch_description():
-    """Generate a launch description for a wild thumper rover."""
+    """Generate a launch description for sam rover."""
     pkg_ardupilot_sitl = get_package_share_directory("ardupilot_sitl")
     pkg_ardupilot_sitl_models = get_package_share_directory("ardupilot_sitl_models")
-    pkg_project_bringup = get_package_share_directory("ardupilot_gz_bringup")
+    pkg_project_bringup = get_package_share_directory("sam_bringup")
     pkg_sam_sitl_models = get_package_share_directory("sam_sitl_models")
-
 
     # Include component launch files.
     sitl_dds = IncludeLaunchDescription(
@@ -77,29 +62,30 @@ def generate_launch_description():
             ]
         ),
         launch_arguments={
-            "transport": "udp4",
-            "refs": PathJoinSubstitution(
-                [
-                    FindPackageShare("ardupilot_sitl"),
-                    "config",
-                    "dds_xrce_profile.xml",
-                ]
-            ),
-            "port": "2019",
             "command": "ardurover",
+            "transport": "udp4",
             "synthetic_clock": "True",
+            "port": "2019",
             "wipe": "False",
             "model": "rover",
             "speedup": "1",
             "slave": "0",
             "instance": "0",
-            "middleware": "rtps",
+            "refs": os.path.join(pkg_ardupilot_sitl, "config", "dds_xrce_profile.xml"),
             "defaults": os.path.join(
-                pkg_sam_sitl_models,
+                pkg_ardupilot_sitl,
                 "config",
-                "sam_ardu.parm",
-            )+ "," 
-            +os.path.join(
+                "default_params",
+                "rover.parm",
+            )
+            + ","
+            # +os.path.join(
+            #     pkg_ardupilot_sitl,
+            #     "config",
+            #     "default_params",
+            #     "rover-skid.parm",
+            # )+ ","
+            + os.path.join(
                 pkg_ardupilot_sitl,
                 "config",
                 "default_params",
@@ -141,7 +127,7 @@ def generate_launch_description():
             "model://sam_model",
             "package://sam_sitl_models/models/sam_model")
 
-    # Publish /tf and /tf_static.
+    # Publish robot description for visualization in
     robot_state_publisher = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
@@ -167,6 +153,14 @@ def generate_launch_description():
                 "qos_overrides./pylon_camera_node/pylon_ros2_camera_node/image_raw.publisher.reliability": "best_effort",
                 "qos_overrides./camera/camera/color/camera_info.publisher.reliability": "best_effort",
                 "qos_overrides./camera/camera/color/image_raw.publisher.reliability": "best_effort",
+                "qos_overrides./sonar_left.publisher.reliability": "best_effort",
+                "qos_overrides./sonar_right.publisher.reliability": "best_effort",
+                "qos_overrides./sonar_back_mid.publisher.reliability": "best_effort",
+                "qos_overrides./sonar_back_right.publisher.reliability": "best_effort",
+                "qos_overrides./sonar_back_left.publisher.reliability": "best_effort",
+                "qos_overrides./scan.publisher.reliability": "best_effort",
+                "qos_overrides./simulation/odometry.publisher.reliability": "best_effort",
+                "qos_overrides./camera/camera/imu.publisher.reliability": "best_effort",
             }
         ],
         output="screen",
@@ -176,32 +170,19 @@ def generate_launch_description():
     topic_tools_tf = Node(
         package="topic_tools",
         executable="relay",
-        arguments=[
-            "/gz/tf",
-            "/tf",
-            #"/camera/camera/color/image_raw",
-            #"/pylon_camera_node/pylon_ros2_camera_node/image_raw"
-        ],
+        arguments=["/gz/tf", "/tf"],
         output="screen",
         respawn=False,
-        condition=IfCondition(LaunchConfiguration("use_gz_tf")),
+        # condition=IfCondition(LaunchConfiguration("use_gz_tf")),
     )
 
     return LaunchDescription(
         [
-            DeclareLaunchArgument(
-                "use_gz_tf", default_value="true", description="Use Gazebo TF."
-            ),
             sitl_dds,
             robot_state_publisher,
             bridge,
             RegisterEventHandler(
-                OnProcessStart(
-                    target_action=bridge,
-                    on_start=[
-                        topic_tools_tf
-                    ]
-                )
+                OnProcessStart(target_action=bridge, on_start=[topic_tools_tf])
             ),
         ]
     )
